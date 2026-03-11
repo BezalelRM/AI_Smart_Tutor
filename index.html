@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Smart Tutor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* --- Body & Particle Canvas --- */
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+      color: white;
+    }
+
+    canvas#particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* --- Landing Card --- */
+    .landing {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      padding: 50px 60px;
+      border-radius: 25px;
+      text-align: center;
+      max-width: 500px;
+      animation: slideUp 1s ease-out;
+      box-shadow: 0 0 20px rgba(106,17,203,0.4), 0 0 40px rgba(37,117,252,0.3);
+      transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .landing:hover {
+      box-shadow: 0 0 40px rgba(106,17,203,0.6), 0 0 80px rgba(37,117,252,0.5);
+    }
+
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(50px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Title --- */
+    .title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    /* --- Subtitle --- */
+    .subtitle {
+      font-size: 1.1rem;
+      color: #f0f0f0;
+      margin-bottom: 40px;
+    }
+
+    /* --- Start Button --- */
+    .start-btn {
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      border: none;
+      padding: 15px 35px;
+      border-radius: 50px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(106,17,203,0.4), 0 0 30px rgba(37,117,252,0.3);
+    }
+
+    .start-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px rgba(106,17,203,0.6), 0 0 50px rgba(37,117,252,0.5);
+      background: linear-gradient(90deg, #2575fc, #6a11cb);
+    }
+
+    /* --- Floating AI Icon --- */
+    .ai-icon {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      font-size: 4rem;
+      animation: float 3s ease-in-out infinite alternate;
+      z-index: 2;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 8px #6a11cb) drop-shadow(0 0 8px #2575fc);
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(15deg); }
+      100% { transform: translateY(0px) rotate(-10deg); }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 600px) {
+      .landing {
+        padding: 40px 30px;
+      }
+      .title {
+        font-size: 2rem;
+      }
+      .ai-icon {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particle Canvas -->
+  <canvas id="particles"></canvas>
+
+  <!-- Landing Content -->
+  <div class="landing">
+    <h1 class="title">🤖 AI Smart Tutor</h1>
+    <p class="subtitle">Learn Faster and Smarter with Artificial Intelligence</p>
+    <a href="dashboard.html">
+      <button class="start-btn">Start Learning 🚀</button>
+    </a>
+    <div class="ai-icon">🛸</div>
+  </div>
+
+  <!-- Particle JS with interactive lines -->
+  <script>
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+    let mouse = { x: null, y: null };
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('mousemove', function(e){
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
+    window.addEventListener('resize', function() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    });
+
+    class Particle {
+      constructor(){
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.speed = Math.random() * 0.05 + 0.01;
+        this.color = 'rgba(255,255,255,0.6)';
+      }
+      update(){
+        if(mouse.x && mouse.y){
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let dist = Math.sqrt(dx*dx + dy*dy);
+          let force = Math.min(50 / (dist*dist), 0.6);
+          this.x += dx * force * this.speed;
+          this.y += dy * force * this.speed;
+        }
+        this.x += (this.baseX - this.x) * this.speed;
+        this.y += (this.baseY - this.y) * this.speed;
+      }
+      draw(){
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    function connectParticles(){
+      let opacityValue = 0.2;
+      for(let a=0; a<particlesArray.length; a++){
+        for(let b=a; b<particlesArray.length; b++){
+          let dx = particlesArray[a].x - particlesArray[b].x;
+          let dy = particlesArray[a].y - particlesArray[b].y;
+          let distance = Math.sqrt(dx*dx + dy*dy);
+          if(distance < 120){
+            ctx.strokeStyle = `rgba(255,255,255,${opacityValue})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+            ctx.closePath();
+          }
+        }
+      }
+    }
+
+    function initParticles(){
+      particlesArray = [];
+      for(let i=0;i<150;i++){
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animateParticles(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particlesArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      connectParticles();
+      requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+  </script>
+
+</body>
+</html>
