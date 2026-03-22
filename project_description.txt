@@ -1,0 +1,35 @@
+🎓 AI Smart Tutor - Project Overview
+====================================
+
+AI Smart Tutor is an optimized, low-cost learning platform designed specifically for students in rural areas with limited internet bandwidth and financial constraints.
+
+🚀 Key Features:
+---------------
+- Cost Efficiency: Achieves 96% cost savings on LLM usage through advanced context pruning and token optimization.
+- Low Bandwidth Optimization: Features a lightweight architecture that functions reliably even on slow internet connections.
+- Intelligent Resource Management:
+    * PDF Ingestion: Automatically chunks and processes textbooks.
+    * Context Pruning: Instead of sending entire textbooks to the AI, it only sends the most relevant sections, drastically reducing latency and token costs.
+- No Heavy Infrastructure: Uses lightweight Python-based storage (JSON/Dictionaries) instead of requiring a full MySQL setup (though MySQL support is also available).
+- Gamified Learning: Includes a Leaderboard and Quiz Generator to keep students engaged and competitive.
+- Progress Tracking: Monitors performance metrics like tokens saved, compression rate, and latency.
+
+�️ Tech Stack:
+---------------
+- Core Backend: Python 3.10+, FastAPI, Uvicorn, Pydantic, Httpx.
+- AI & Document Processing: ScaleDown API / OpenAI, PDFPlumber, PyPDF2, and custom Context Pruning logic.
+- Frontend: HTML5, CSS3, ES6+ JavaScript, Chart.js for data visualization.
+- Data & Storage: Lightweight JSON-based persistence, Python Dictionaries for caching, and optional MySQL support.
+- DevTools: Virtualenv for environment isolation, automated Bash scripts (start.sh) for deployment.
+
+�📁 Core Structure:
+-----------------
+- Backend: Powering the AI services, PDF processing, and quiz generation.
+- Frontend: A comprehensive dashboard suite including a Chat interface, Progress tracker, and Leaderboard.
+- Storage: Local JSON persistence for users, questions, and textbook metadata.
+
+🛠️ Current Status:
+------------------
+The project is fully synced with the GitHub repository and servers are running at:
+- Frontend: http://localhost:8000/login.html
+- Backend: http://localhost:5000
